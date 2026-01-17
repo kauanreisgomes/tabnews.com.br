@@ -65,8 +65,6 @@ async function read(notificationId, user_id) {
         updated_at = (now() at time zone 'utc')
       WHERE
         id = $1 AND user_id = $2
-      RETURNING
-        *
       ;`,
     values: [notificationId, user_id],
   };
@@ -84,14 +82,11 @@ async function markAllAsRead(userId) {
         updated_at = (now() at time zone 'utc')
       WHERE
         user_id = $1
-      RETURNING
-        *
       ;`,
     values: [userId],
   };
 
-  const results = await database.query(query);
-  return results.rows;
+  await database.query(query);
 }
 
 async function count(values = {}, options = {}) {
